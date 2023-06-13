@@ -84,14 +84,14 @@ async def get_product_avg(id:int, user:str = Header(), token:str = Header()):
 
     # request.cookies.get('user')
     try:
-        if user in tokens and tokens[user][0] == token and tokens[user][1] < 10:
+        if user in tokens and tokens[user][0] == token and tokens[user][1] < 50:
             # increment token use count
             tokens[user][1] += 1
             # get requested data
             data = get_db_writer().get_product_mark(id)
-            if data == []:
-                return Response(status_code = 404)    
-            prod_name, prod_mark = handlers.task1(data)
+            # if data == []:
+            #     return Response(status_code = 404)    
+            prod_name, prod_mark = data[0]
             return JSONResponse(status_code = 200, 
                                 content = { "nume":prod_name, "nota_medie":prod_mark })        
         # if day limit achieved!
@@ -103,7 +103,7 @@ async def get_product_avg(id:int, user:str = Header(), token:str = Header()):
         raise HTTPException(status_code=401, detail='Please, generate an access token first!')
 
 @app.get('/{id}/reviews')
-async def get_product_avg(id:int, user:str = Header(), token:str = Header()):
+async def get_all_revs(id:int, user:str = Header(), token:str = Header()):
 
     # request.cookies.get('user')
     try:

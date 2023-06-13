@@ -17,8 +17,9 @@ class DB_Writer:
         return check_data == password
     
     def get_product_mark(self, product_id):
-        query = "SELECT p.nume, e.nota FROM Evaluari e JOIN Produse p ON p.id = e.FK_product_id WHERE p.id = ? and e.status = 1"
+        query = "SELECT p.nume, avg(e.nota) FROM Evaluari e JOIN Produse p ON p.id = e.FK_product_id WHERE p.id = ? and e.status = 1"
         data = self.__cursor.execute(query, (product_id, )).fetchall()
+        print(data)
         return data
     
     def get_product_evals(self, product_id):
@@ -26,13 +27,6 @@ class DB_Writer:
         data = self.__cursor.execute(query, (product_id, )).fetchall()
         return data
         
-
-def task1(data):
-    prod_name = data[0][0]
-    prod_marks = [mark for _, mark in data]
-    prod_mark = sum(prod_marks) / len(prod_marks)
-    return prod_name, prod_mark
-
 def task2(data):
     prod_name = data[0][0]
     prod_evaluations = [ (item[1], item[2]) for item in data ] 
